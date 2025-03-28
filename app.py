@@ -1,13 +1,9 @@
-import os
 from flask import Flask
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 app = Flask(__name__)
+app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
 @app.route('/')
 def hello():
     return "Hello from Wi-Fi!"
-
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5001))  # default for local dev
-    app.run(host='0.0.0.0', port=port)
-
